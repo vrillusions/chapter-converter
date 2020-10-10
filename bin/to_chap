@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Converts from easy chapter format to OGM format chapter file
+
+set -e
+set -u
+set -o pipefail
+
+
+# -- script constants --
+readonly script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly script_name="$(basename "$0")"
+
+
+if [[ $# -ne 1 ]] || [[ "$1" =~ ^-*h ]]; then
+    echo "Usage: ${script_name} <input file>" >&2
+    exit 2
+fi
+
+input_file="$1"
+
+
+if [[ ! -r "${input_file}" ]]; then
+    echo "Unable to read file ${input_file}" >&2
+    exit 100
+fi
+
+declare -i i
+i=0
+while read -e chaptime title; do
+    printf "CHAPTER%03d=%s\n" $i "${chaptime}"
+    printf "CHAPTER%03dTITLE=%s\n" $i "${title}"
+    i=$i+1
+done <"${input_file}"
