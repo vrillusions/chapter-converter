@@ -8,7 +8,6 @@ set -o pipefail
 
 
 # -- script constants --
-readonly script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly script_name="$(basename "$0")"
 
 
@@ -27,7 +26,7 @@ fi
 
 declare -i i
 i=0
-while read -e chaptime title; do
+while read -r chaptime title; do
     printf "CHAPTER%03d=%s\n" $i "${chaptime}"
     printf "CHAPTER%03dTITLE=%s\n" $i "${title}"
     i=$i+1
